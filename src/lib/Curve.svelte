@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Bezier } from "bezier-js";
+    import { Bezier, type BBox } from "bezier-js";
 
     type Point = { x: number, y: number };
     const point = (x: number, y: number): Point => ({ x, y });
@@ -47,14 +47,41 @@
         return argument !== undefined
     }
 
-    $: beziers = points.map(pointSet => new Bezier(...pointSet.filter(isDefined).map(mul(desiredScale))));
+    function bboxMax(...bboxList: BBox[]): BBox {
+        return {
+            x: {
+                min: Math.min(...bboxList.map(bbox => bbox.x.min)),
+                max: Math.max(...bboxList.map(bbox => bbox.x.max))
+            },
+            y: {
+                min: Math.min(...bboxList.map(bbox => bbox.y.min)),
+                max: Math.max(...bboxList.map(bbox => bbox.y.max))
+            }
+        }
+    }
+
+    function padBBox(bbox: BBox, padding: number): BBox {
+        return {
+            x: {
+                min: bbox.x.min - padding,
+                max: bbox.x.max + padding
+            },
+            y: {
+                min: bbox.y.min - padding,
+                max: bbox.y.max + padding
+            }
+        }
+    }
+
+    $: bezierCurves = points.map(pointSet => new Bezier(...pointSet.filter(isDefined).map(mul(desiredScale))));
+    $: extrema = padBBox(bboxMax(...bezierCurves.map(bezier => bezier.bbox())), 0.1 * desiredScale);
 
 </script>
 
 <div class="container">
-    <svg viewBox="{-1.1 * desiredScale} {-1.1 * desiredScale} {2.2 * desiredScale} {2.2 * desiredScale}" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="{extrema.x.min} {extrema.y.min} {extrema.x.max - extrema.x.min} {extrema.y.max - extrema.y.min}" xmlns="http://www.w3.org/2000/svg">
         <defs>
-            <path d={beziers.map(bezier => bezier.toSVG()).join(" ")} fill="none" id="svelteCurve-{uuid}" stroke="black" stroke-width="0.01" />
+            <path d={bezierCurves.map(bezier => bezier.toSVG()).join(" ")} fill="none" id="svelteCurve-{uuid}" stroke="black" stroke-width="0.01" />
         </defs>
         <text textLength={scale === "auto" ? "auto" : `${Math.PI * desiredScale * 2}px`}>
             <textPath lengthAdjust="spacingAndGlyphs" method="stretch" href="#svelteCurve-{uuid}">
