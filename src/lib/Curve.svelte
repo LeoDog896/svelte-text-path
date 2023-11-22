@@ -3,6 +3,7 @@
 
     type Point = { x: number, y: number };
     const point = (x: number, y: number): Point => ({ x, y });
+    const mul = (factor: number) => (point: Point): Point => ({ x: point.x * factor, y: point.y * factor });
 
     // https://stackoverflow.com/a/27863181/7589775 - cubic bezier approximation of a circle
     const k = 4 * (Math.sqrt(2) - 1) / 3;
@@ -35,42 +36,41 @@
         ]
     ]
 
-    export let text: string;
-    export let scale = 200;
+    export let scale: number | "auto" = "auto";
 
-    $: chars = text.split("")
-    $: beziers = points.map(pointSet => new Bezier(...pointSet));
+    // TODO: calculate scale based on text length
+    $: desiredScale = scale === "auto" ? 100 : scale;
 
-    function charIndexToData(i: number, _: unknown): [Point, number] {
-        const t = (i / chars.length) * beziers.length;
-        const bezier = beziers[Math.floor(t)];
-        return [bezier.get(t % 1), Math.atan2(bezier.derivative(t % 1).y, bezier.derivative(t % 1).x)];
+    const uuid = crypto.randomUUID();
+
+    function isDefined<T>(argument: T | undefined): argument is T {
+        return argument !== undefined
     }
+
+    $: beziers = points.map(pointSet => new Bezier(...pointSet.filter(isDefined).map(mul(desiredScale))));
+
 </script>
 
-<!-- TODO: accessibility -->
 <div class="container">
-    {#each chars as char, i}
-        <!-- we pass in char as a side effect -->
-        {@const [point, rot] = charIndexToData(i, [char])}
-        <div class="char-container">
-            <p style="
-                left: {point.x * scale}px;
-                top: {point.y * scale}px;
-                transform: rotate({rot}rad);
-            ">{char}</p>
-        </div>
-    {/each}
+    <svg viewBox="{-1.1 * desiredScale} {-1.1 * desiredScale} {2.2 * desiredScale} {2.2 * desiredScale}" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <path d={beziers.map(bezier => bezier.toSVG()).join(" ")} fill="none" id="svelteCurve-{uuid}" stroke="black" stroke-width="0.01" />
+        </defs>
+        <text textLength={scale === "auto" ? "auto" : `${Math.PI * desiredScale * 2}px`}>
+            <textPath lengthAdjust="spacingAndGlyphs" method="stretch" href="#svelteCurve-{uuid}">
+                <slot />
+            </textPath>
+        </text>
+    </svg>
 </div>
 
 <style>
-    .char-container {
-        position: relative;
-        display: inline-block;
+    svg {
+        width: 100%;
+        height: 100%;
     }
 
-    p {
-        position: absolute;
-        margin: 0;
+    path {
+        user-select: none;
     }
 </style>
