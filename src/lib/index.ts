@@ -1,3 +1,3 @@
-import Curve from "./Curve.svelte";
+import Curve from './Curve.svelte';
 
 export { Curve };
