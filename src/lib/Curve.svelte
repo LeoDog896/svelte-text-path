@@ -41,7 +41,7 @@
     $: chars = text.split("")
     $: beziers = points.map(pointSet => new Bezier(...pointSet));
 
-    function charIndexToData(i: number): [Point, number] {
+    function charIndexToData(i: number, _: unknown): [Point, number] {
         const t = (i / chars.length) * beziers.length;
         const bezier = beziers[Math.floor(t)];
         return [bezier.get(t % 1), Math.atan2(bezier.derivative(t % 1).y, bezier.derivative(t % 1).x)];
@@ -49,16 +49,19 @@
 </script>
 
 <!-- TODO: accessibility -->
-{#each chars as char, i}
-    {@const [point, rot] = charIndexToData(i)}
-    <div class="char-container">
-        <p style="
-            left: {point.x * scale}px;
-            top: {point.y * scale}px;
-            transform: rotate({rot}rad);
-        ">{char}</p>
-    </div>
-{/each}
+<div class="container">
+    {#each chars as char, i}
+        <!-- we pass in char as a side effect -->
+        {@const [point, rot] = charIndexToData(i, [char])}
+        <div class="char-container">
+            <p style="
+                left: {point.x * scale}px;
+                top: {point.y * scale}px;
+                transform: rotate({rot}rad);
+            ">{char}</p>
+        </div>
+    {/each}
+</div>
 
 <style>
     .char-container {
