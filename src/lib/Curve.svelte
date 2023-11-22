@@ -48,6 +48,7 @@
     }
 </script>
 
+<!-- TODO: accessibility -->
 {#each chars as char, i}
     {@const [point, rot] = charIndexToData(i)}
     <div class="char-container">
