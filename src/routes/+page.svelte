@@ -1,2 +1,18 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+    import { Curve } from "$lib";
+</script>
+
+<div class="center">
+    <div>
+        <Curve text="lets  mess  around  and  find  out,  ok?  " />
+    </div>
+</div>
+
+<style>
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+</style>
