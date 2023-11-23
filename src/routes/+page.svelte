@@ -70,4 +70,8 @@
 		margin-left: calc(-1 * min(100vw / 2, 100vh / 2));
 		text-align: center;
 	}
+
+    h1 {
+        font-weight: 500;
+    }
 </style>

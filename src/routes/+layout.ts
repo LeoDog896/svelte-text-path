@@ -5,6 +5,7 @@ export const load = ({ url }) => {
 	const { pathname } = url;
 
 	return {
-		pathname
+		pathname,
+        isDocs: pathname.startsWith('/svelte-text-path/docs'),
 	};
 };
