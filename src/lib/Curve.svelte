@@ -87,6 +87,11 @@
 	}
 
 	function correctSize(guess: boolean) {
+
+		if (sizerParagraph.textContent?.trim().length === 0) {
+			return;
+		}
+
 		if (path && sizerParagraph) {
 			const comparison = compare(path.getTotalLength(), sizerParagraph.getComputedTextLength(), 20);
 			if (comparison !== 0) {
