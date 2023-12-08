@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Bezier, type BBox } from 'bezier-js';
+	import { onMount, tick } from 'svelte';
 
 	type Point = { x: number; y: number };
 	const point = (x: number, y: number): Point => ({ x, y });
@@ -59,6 +60,45 @@
 		(pointSet) => new Bezier(...pointSet.filter(isDefined).map(mul(desiredScale)))
 	);
 	$: extrema = padBBox(bboxMax(...bezierCurves.map((bezier) => bezier.bbox())), 0.1 * desiredScale);
+
+    let sizerParagraph: SVGTextElement;
+    let path: SVGPathElement;
+
+    let fontSize = 12;
+
+    onMount(() => {
+        // listen to when sizerParagraph's content changes
+        const observer = new MutationObserver(correctSize);
+
+        observer.observe(sizerParagraph, {
+            childList: true,
+			characterData: true,
+			subtree: true,
+        });
+
+		correctSize()
+
+        return () => observer.disconnect();
+    })
+
+	function compare(a: number, b: number, epsilon: number): -1 | 0 | 1 {
+		if (Math.abs(a - b) < epsilon) return 0;
+		return a > b ? 1 : -1;
+	}
+
+	async function correctSize() {
+		if (path && sizerParagraph) {
+			const comparison = compare(path.getTotalLength(), sizerParagraph.getComputedTextLength(), 20);
+			console.log(path.getTotalLength())
+			if (comparison !== 0) {
+				fontSize += 0.1 * Math.sign(comparison);
+				await tick();
+				await correctSize();
+			}
+		}
+	}
+
+    $: fontSizeString = `${fontSize}px`;
 </script>
 
 <div class="container">
@@ -69,14 +109,16 @@
 	>
 		<defs>
 			<path
+                bind:this={path}
 				d={bezierCurves.map((bezier) => bezier.toSVG()).join(' ')}
 				fill="none"
 				id="svelteCurve-{uuid}"
-				stroke="black"
-				stroke-width="0.01"
 			/>
+			<text font-size={fontSizeString} bind:this={sizerParagraph}>
+				<slot />
+			</text>
 		</defs>
-		<text textLength={scale === 'auto' ? 'auto' : `${Math.PI * desiredScale * 2}px`}>
+		<text font-size={fontSizeString} textLength={scale === 'auto' ? 'auto' : `${Math.PI * desiredScale * 2}px`}>
 			<textPath lengthAdjust="spacingAndGlyphs" method="stretch" href="#svelteCurve-{uuid}">
 				<slot />
 			</textPath>
