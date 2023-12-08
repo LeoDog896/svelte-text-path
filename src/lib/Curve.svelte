@@ -68,7 +68,7 @@
 
     onMount(() => {
         // listen to when sizerParagraph's content changes
-        const observer = new MutationObserver(correctSize);
+        const observer = new MutationObserver(() => correctSize(true));
 
         observer.observe(sizerParagraph, {
             childList: true,
@@ -76,7 +76,7 @@
 			subtree: true,
         });
 
-		correctSize()
+		correctSize(true)
 
         return () => observer.disconnect();
     })
@@ -86,14 +86,16 @@
 		return a > b ? 1 : -1;
 	}
 
-	async function correctSize() {
+	function correctSize(guess: boolean) {
 		if (path && sizerParagraph) {
 			const comparison = compare(path.getTotalLength(), sizerParagraph.getComputedTextLength(), 20);
-			console.log(path.getTotalLength())
 			if (comparison !== 0) {
+				if (guess && sizerParagraph.textContent) {
+					fontSize = path.getTotalLength() / sizerParagraph.textContent.length;
+				}
+
 				fontSize += 0.1 * Math.sign(comparison);
-				await tick();
-				await correctSize();
+				tick().then(() => correctSize(false))
 			}
 		}
 	}
