@@ -44,11 +44,7 @@
 					sizerParagraph.getComputedTextLength(),
 					0.001
 				);
-				const alphaBetaComparison = compare(
-					alpha,
-					beta,
-					svgPath.getTotalLength() / 1_000_000
-				);
+				const alphaBetaComparison = compare(alpha, beta, svgPath.getTotalLength() / 1_000_000);
 				if (comparison !== 0 && alphaBetaComparison !== 0) {
 					correctSize(
 						// path length is bigger than text length - text needs to be bigger
@@ -65,24 +61,14 @@
 </script>
 
 <div class="container">
-	<svg
-		viewBox={viewBox.join(' ')}
-		xmlns="http://www.w3.org/2000/svg"
-	>
+	<svg viewBox={viewBox.join(' ')} xmlns="http://www.w3.org/2000/svg">
 		<defs>
-			<path
-				bind:this={svgPath}
-				d={path}
-				fill="none"
-				id="svelteCurve-{uuid}"
-			/>
+			<path bind:this={svgPath} d={path} fill="none" id="svelteCurve-{uuid}" />
 			<text font-size={fontSizeString} bind:this={sizerParagraph}>
 				<slot />
 			</text>
 		</defs>
-		<text
-			font-size={fontSizeString}
-		>
+		<text font-size={fontSizeString}>
 			<textPath lengthAdjust="spacingAndGlyphs" method="stretch" href="#svelteCurve-{uuid}">
 				<slot />
 			</textPath>

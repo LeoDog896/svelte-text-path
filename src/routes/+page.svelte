@@ -16,7 +16,11 @@
 
 <header class="content">
 	<h1>svelte-text-path</h1>
-	<p>auto-sizing <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/textPath">text-path</a> <a href="https://svelte.dev/">svelte</a> library</p>
+	<p>
+		auto-sizing <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/textPath"
+			>text-path</a
+		> <a href="https://svelte.dev/">svelte</a> library
+	</p>
 	<p>
 		<a href="https://npmjs.com/package/svelte-text-path">NPM</a> |
 		<a href="https://github.com/LeoDog896/svelte-text-path">GitHub</a>
