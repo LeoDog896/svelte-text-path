@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Curve } from '$lib';
+	import { Circle } from '$lib';
 	import { sineOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
 
@@ -25,7 +25,7 @@
 
 <div class="center">
 	<div class="spin-container" style="transform: rotate({$rotation}deg)">
-		<Curve>{@html text}</Curve>
+		<Circle>{@html text}</Circle>
 	</div>
 	<div class="input">
 		<textarea

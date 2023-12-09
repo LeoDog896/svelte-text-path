@@ -1,3 +1,4 @@
-import Curve from './Curve.svelte';
+import TextPath from './TextPath.svelte';
+import Circle from './Circle.svelte';
 
-export { Curve };
+export { TextPath, Circle };
