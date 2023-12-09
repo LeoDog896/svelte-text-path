@@ -68,7 +68,7 @@
 
     onMount(() => {
         // listen to when sizerParagraph's content changes
-        const observer = new MutationObserver(() => correctSize(true));
+        const observer = new MutationObserver(() => correctSize(path.getTotalLength(), 0));
 
         observer.observe(sizerParagraph, {
             childList: true,
@@ -76,7 +76,7 @@
 			subtree: true,
         });
 
-		correctSize(true)
+		correctSize(path.getTotalLength(), 0);
 
         return () => observer.disconnect();
     })
@@ -86,22 +86,25 @@
 		return a > b ? 1 : -1;
 	}
 
-	function correctSize(guess: boolean) {
-
+	function correctSize(alpha: number, beta: number) {
 		if (sizerParagraph.textContent?.trim().length === 0) {
 			return;
 		}
 
 		if (path && sizerParagraph) {
-			const comparison = compare(path.getTotalLength(), sizerParagraph.getComputedTextLength(), 20);
-			if (comparison !== 0) {
-				if (guess && sizerParagraph.textContent) {
-					fontSize = path.getTotalLength() / sizerParagraph.textContent.length;
+			fontSize = (alpha + beta) / 2;
+			tick().then(() => {
+				const comparison = compare(path.getTotalLength(), sizerParagraph.getComputedTextLength(), 0.01);
+				const alphaBetaComparison = compare(alpha, beta, 0.01);
+				if (comparison !== 0 && alphaBetaComparison !== 0) {
+					correctSize(
+						// path length is bigger than text length - text needs to be bigger 
+						comparison === 1 ? alpha : fontSize,
+						// path length is smaller than text length - text needs to be smaller
+						comparison === -1 ? beta : fontSize
+					);
 				}
-
-				fontSize += 0.1 * Math.sign(comparison);
-				tick().then(() => correctSize(false))
-			}
+			});
 		}
 	}
 
