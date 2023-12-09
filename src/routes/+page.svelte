@@ -4,7 +4,7 @@
 	import { tweened } from 'svelte/motion';
 
 	let text =
-		'Whereas recognition of the inherent dignity and of the equal and inalienable rights of all members of the human family is the foundation of freedom, justice and peace in the world,';
+		'Whereas recognition of the inherent dignity and of the equal and inalienable rights of all members of the human family is the foundation of freedom, justice and peace in the world,&nbsp;';
 
 	let inputFocused: boolean;
 	$: spinning = !inputFocused;
@@ -16,7 +16,7 @@
 
 <header class="content">
 	<h1>svelte-text-path</h1>
-	<p>text-path wrapper for svelte</p>
+	<p>auto-sizing <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/textPath">text-path</a> <a href="https://svelte.dev/">svelte</a> library</p>
 	<p>
 		<a href="https://npmjs.com/package/svelte-text-path">NPM</a> |
 		<a href="https://github.com/LeoDog896/svelte-text-path">GitHub</a>
@@ -25,7 +25,7 @@
 
 <div class="center">
 	<div class="spin-container" style="transform: rotate({$rotation}deg)">
-		<Curve>{text}</Curve>
+		<Curve>{@html text}</Curve>
 	</div>
 	<div class="input">
 		<textarea
@@ -71,7 +71,7 @@
 		text-align: center;
 	}
 
-    h1 {
-        font-weight: 500;
-    }
+	h1 {
+		font-weight: 500;
+	}
 </style>

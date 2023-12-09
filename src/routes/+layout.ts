@@ -6,6 +6,6 @@ export const load = ({ url }) => {
 
 	return {
 		pathname,
-        isDocs: pathname.startsWith('/svelte-text-path/docs'),
+		isDocs: pathname.startsWith('/svelte-text-path/docs')
 	};
 };

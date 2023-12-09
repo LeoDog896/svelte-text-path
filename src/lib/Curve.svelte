@@ -61,25 +61,25 @@
 	);
 	$: extrema = padBBox(bboxMax(...bezierCurves.map((bezier) => bezier.bbox())), 0.1 * desiredScale);
 
-    let sizerParagraph: SVGTextElement;
-    let path: SVGPathElement;
+	let sizerParagraph: SVGTextElement;
+	let path: SVGPathElement;
 
-    let fontSize = 12;
+	let fontSize = 12;
 
-    onMount(() => {
-        // listen to when sizerParagraph's content changes
-        const observer = new MutationObserver(() => correctSize(path.getTotalLength(), 0));
+	onMount(() => {
+		// listen to when sizerParagraph's content changes
+		const observer = new MutationObserver(() => correctSize(path.getTotalLength(), 0));
 
-        observer.observe(sizerParagraph, {
-            childList: true,
+		observer.observe(sizerParagraph, {
+			childList: true,
 			characterData: true,
-			subtree: true,
-        });
+			subtree: true
+		});
 
 		correctSize(path.getTotalLength(), 0);
 
-        return () => observer.disconnect();
-    })
+		return () => observer.disconnect();
+	});
 
 	function compare(a: number, b: number, epsilon: number): -1 | 0 | 1 {
 		if (Math.abs(a - b) < epsilon) return 0;
@@ -94,11 +94,15 @@
 		if (path && sizerParagraph) {
 			fontSize = (alpha + beta) / 2;
 			tick().then(() => {
-				const comparison = compare(path.getTotalLength(), sizerParagraph.getComputedTextLength(), 0.01);
+				const comparison = compare(
+					path.getTotalLength(),
+					sizerParagraph.getComputedTextLength(),
+					0.01
+				);
 				const alphaBetaComparison = compare(alpha, beta, 0.01);
 				if (comparison !== 0 && alphaBetaComparison !== 0) {
 					correctSize(
-						// path length is bigger than text length - text needs to be bigger 
+						// path length is bigger than text length - text needs to be bigger
 						comparison === 1 ? alpha : fontSize,
 						// path length is smaller than text length - text needs to be smaller
 						comparison === -1 ? beta : fontSize
@@ -108,7 +112,7 @@
 		}
 	}
 
-    $: fontSizeString = `${fontSize}px`;
+	$: fontSizeString = `${fontSize}px`;
 </script>
 
 <div class="container">
@@ -119,7 +123,7 @@
 	>
 		<defs>
 			<path
-                bind:this={path}
+				bind:this={path}
 				d={bezierCurves.map((bezier) => bezier.toSVG()).join(' ')}
 				fill="none"
 				id="svelteCurve-{uuid}"
@@ -128,7 +132,10 @@
 				<slot />
 			</text>
 		</defs>
-		<text font-size={fontSizeString} textLength={scale === 'auto' ? 'auto' : `${Math.PI * desiredScale * 2}px`}>
+		<text
+			font-size={fontSizeString}
+			textLength={scale === 'auto' ? 'auto' : `${Math.PI * desiredScale * 2}px`}
+		>
 			<textPath lengthAdjust="spacingAndGlyphs" method="stretch" href="#svelteCurve-{uuid}">
 				<slot />
 			</textPath>

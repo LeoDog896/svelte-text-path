@@ -3,27 +3,23 @@
 	import { cubicIn, cubicOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
-    import '@fontsource-variable/hepta-slab';
+	import '@fontsource-variable/hepta-slab';
 	import '../app.css';
 
 	export let data: PageData;
 	$: pathname = data.pathname;
-    $: isDocs = data.isDocs
+	$: isDocs = data.isDocs;
 
-    const duration = 300;
+	const duration = 300;
 	const delay = duration + 100;
-	const x = () => 10 * (isDocs ? -1 : 1)
+	const x = () => 10 * (isDocs ? -1 : 1);
 
 	const transitionIn = { easing: cubicOut, x: x(), duration, delay };
 	const transitionOut = { easing: cubicIn, x: -x(), duration };
 </script>
 
 {#key pathname}
-	<div
-		class="display"
-		in:fly={transitionIn}
-        out:fly={transitionOut}
-	>
+	<div class="display" in:fly={transitionIn} out:fly={transitionOut}>
 		<slot />
 	</div>
 {/key}
@@ -51,6 +47,6 @@
 		text-decoration: none;
 		padding: 1rem;
 		width: 100%;
-        font-size: 1.5rem;
+		font-size: 1.5rem;
 	}
 </style>
