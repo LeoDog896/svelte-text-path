@@ -29,7 +29,7 @@
 
 <div class="center">
 	<div class="spin-container" style="transform: rotate({$rotation}deg)">
-		<Circle>{@html text}</Circle>
+		<Circle>{@html text.replaceAll(" ", "&nbsp;")}</Circle>
 	</div>
 	<div class="input">
 		<textarea

@@ -3,6 +3,17 @@
 
 	export let path: string;
 	export let viewBox: [number, number, number, number];
+	export let padding = 0.1;
+
+	$: viewBoxWidth = viewBox[2] - viewBox[0];
+	$: viewBoxHeight = viewBox[3] - viewBox[1];
+
+	$: calculatedViewBox = [
+		viewBox[0] - padding * viewBoxWidth,
+		viewBox[1] - padding * viewBoxHeight,
+		viewBox[2] + padding * viewBoxWidth * 2,
+		viewBox[3] + padding * viewBoxHeight * 2
+	];
 
 	const uuid = crypto.randomUUID();
 
@@ -61,7 +72,7 @@
 </script>
 
 <div class="container">
-	<svg viewBox={viewBox.join(' ')} xmlns="http://www.w3.org/2000/svg">
+	<svg viewBox={calculatedViewBox.join(' ')} xmlns="http://www.w3.org/2000/svg">
 		<defs>
 			<path bind:this={svgPath} d={path} fill="none" id="svelteCurve-{uuid}" />
 			<text font-size={fontSizeString} bind:this={sizerParagraph}>
