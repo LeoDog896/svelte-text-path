@@ -62,7 +62,7 @@
 		</div>
 		<div class="split" />
 		<div class="code">
-			<Highlight language={xml} code={ReactivityText} />
+			<Highlight language={xml} code={ReactivityText.replace("$lib", "svelte-text-path")} />
 		</div>
 	</div>
 
@@ -124,7 +124,7 @@
 		</div>
 		<div class="split" />
 		<div class="code">
-			<Highlight language={xml} code={TextPathText} />
+			<Highlight language={xml} code={TextPathText.replace("$lib", "svelte-text-path")} />
 		</div>
 	</div>
 
@@ -142,7 +142,7 @@
 		</div>
 		<div class="split" />
 		<div class="code">
-			<Highlight language={xml} code={CircleText} />
+			<Highlight language={xml} code={CircleText.replace("$lib", "svelte-text-path")} />
 		</div>
 	</div>
 </main>
