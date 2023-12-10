@@ -75,6 +75,14 @@
 		<AutoSize />
 	</div>
 
+	<div class="note">
+		<p>
+			<span class="note">Note: </span> if your users have JavaScript disabled, the text will not be
+			auto-sized, and will instead be the default font-size. If you want to support users with
+			JavaScript disabled, you should use the fixed <code>fontSize</code> property.
+		</p>
+	</div>
+
 	<h2>## Components</h2>
 
 	<h3>### TextPath</h3>
@@ -145,6 +153,16 @@
 		align-items: center;
 		width: 100%;
 		height: 320px;
+	}
+
+	div.note {
+		border-left: 0.5rem solid #3483eb;
+		padding-left: 0.5rem;
+	}
+
+	span.note {
+		font-weight: bold;
+		color: #3483eb;
 	}
 
 	.border {
