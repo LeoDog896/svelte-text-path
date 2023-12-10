@@ -177,6 +177,7 @@
 	main {
 		max-width: 900px;
 		margin: 0 auto;
+		padding: 1rem;
 		margin-bottom: 9rem;
 	}
 </style>
