@@ -20,7 +20,9 @@
 	let sizerParagraph: SVGTextElement;
 	let svgPath: SVGPathElement;
 
-	let fontSize = 12;
+	export let fontSize: number | undefined = undefined;
+
+	let calculatedFontSize = 12;
 
 	onMount(() => {
 		// listen to when sizerParagraph's content changes
@@ -43,12 +45,17 @@
 	}
 
 	function correctSize(alpha: number, beta: number) {
+		if (fontSize) {
+			calculatedFontSize = fontSize;
+			return;
+		}
+
 		if (sizerParagraph.textContent?.trim().length === 0) {
 			return;
 		}
 
 		if (svgPath && sizerParagraph) {
-			fontSize = (alpha + beta) / 2;
+			calculatedFontSize = (alpha + beta) / 2;
 			tick().then(() => {
 				const comparison = compare(
 					svgPath.getTotalLength(),
@@ -59,16 +66,16 @@
 				if (comparison !== 0 && alphaBetaComparison !== 0) {
 					correctSize(
 						// path length is bigger than text length - text needs to be bigger
-						comparison === 1 ? alpha : fontSize,
+						comparison === 1 ? alpha : calculatedFontSize,
 						// path length is smaller than text length - text needs to be smaller
-						comparison === -1 ? beta : fontSize
+						comparison === -1 ? beta : calculatedFontSize
 					);
 				}
 			});
 		}
 	}
 
-	$: fontSizeString = `${fontSize}px`;
+	$: fontSizeString = `${calculatedFontSize}px`;
 </script>
 
 <div class="container">
