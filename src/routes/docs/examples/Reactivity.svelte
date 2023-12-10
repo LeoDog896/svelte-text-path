@@ -6,4 +6,4 @@
 
 <input type="text" bind:value={text} />
 
-<Circle>{@html text.replaceAll(' ', '&nbsp;')}</Circle>
+<Circle>{@html text}</Circle>

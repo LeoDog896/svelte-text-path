@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	export let path: string;
 	export let viewBox: [number, number, number, number];
@@ -24,6 +25,12 @@
 	export let tickFunction: () => Promise<unknown> = tick;
 
 	let calculatedFontSize = 12;
+
+	const dispatch = createEventDispatcher<{
+		fontSize: number;
+	}>();
+
+	$: dispatch('fontSize', calculatedFontSize);
 
 	onMount(() => {
 		// listen to when sizerParagraph's content changes

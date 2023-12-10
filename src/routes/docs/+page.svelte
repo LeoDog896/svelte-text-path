@@ -4,6 +4,7 @@
 	import 'svelte-highlight/styles/github.css';
 
 	import ReactivityText from './examples/Reactivity.svelte?raw';
+	import Reactivity from './examples/ReactivityStyled.svelte';
 
 	import CircleText from './examples/Circle.svelte?raw';
 	import Circle from './examples/Circle.svelte';
@@ -55,7 +56,15 @@
 	</p>
 	<p>For example, you can bind the text to an input, as shown in the home demo.</p>
 
-	<Highlight language={xml} code={ReactivityText} />
+	<div class="example">
+		<div class="demo">
+			<Reactivity />
+		</div>
+		<div class="split" />
+		<div class="code">
+			<Highlight language={xml} code={ReactivityText} />
+		</div>
+	</div>
 
 	<h2>## Auto-sizing</h2>
 
@@ -197,5 +206,6 @@
 		margin: 0 auto;
 		padding: 1rem;
 		margin-bottom: 9rem;
+		margin-top: 10rem;
 	}
 </style>
