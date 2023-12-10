@@ -21,6 +21,7 @@
 	let svgPath: SVGPathElement;
 
 	export let fontSize: number | undefined = undefined;
+	export let tickFunction: () => Promise<unknown> = tick;
 
 	let calculatedFontSize = 12;
 
@@ -56,7 +57,7 @@
 
 		if (svgPath && sizerParagraph) {
 			calculatedFontSize = (alpha + beta) / 2;
-			tick().then(() => {
+			tickFunction().then(() => {
 				const comparison = compare(
 					svgPath.getTotalLength(),
 					sizerParagraph.getComputedTextLength(),

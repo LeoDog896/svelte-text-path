@@ -10,6 +10,8 @@
 
 	import TextPathText from './examples/TextPath.svelte?raw';
 	import TextPath from './examples/TextPath.svelte';
+
+	import AutoSize from './examples/AutoSize.svelte';
 </script>
 
 <main>
@@ -68,6 +70,10 @@
 		If this behavior is not desired, the <code>fontSize</code> property can be set to a fixed value,
 		which will be used instead of the auto-sizing algorithm.
 	</p>
+
+	<div class="example border">
+		<AutoSize />
+	</div>
 
 	<h2>## Components</h2>
 
@@ -139,6 +145,11 @@
 		align-items: center;
 		width: 100%;
 		height: 320px;
+	}
+
+	.border {
+		border-radius: 0.5rem;
+		border: 1px solid #ccc;
 	}
 
 	.code {
