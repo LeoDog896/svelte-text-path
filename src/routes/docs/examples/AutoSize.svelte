@@ -16,7 +16,7 @@
 			tickFunction={delayFunc}
 			on:fontSize={(e) => (fontSize = e.detail)}
 		>
-			This is some text that will autofit;
+			This is some text that will autofit.
 		</TextPath>
 	{/key}
 

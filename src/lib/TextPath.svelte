@@ -34,7 +34,7 @@
 
 	onMount(() => {
 		// listen to when sizerParagraph's content changes
-		const observer = new MutationObserver(() => correctSize(svgPath.getTotalLength(), 0));
+		const observer = new MutationObserver(() => (bounds = [svgPath.getTotalLength(), 0]));
 
 		observer.observe(sizerParagraph, {
 			childList: true,
@@ -42,7 +42,7 @@
 			subtree: true
 		});
 
-		correctSize(svgPath.getTotalLength(), 0);
+		bounds = [svgPath.getTotalLength(), 0];
 
 		return () => observer.disconnect();
 	});
@@ -52,32 +52,39 @@
 		return a > b ? 1 : -1;
 	}
 
-	function correctSize(alpha: number, beta: number) {
+	let bounds: [alpha: number, beta: number] | undefined = undefined;
+
+	$: if (path && svgPath) {
+		tick().then(() => (bounds = [svgPath.getTotalLength(), 0]));
+	}
+	$: if (bounds !== undefined && sizerParagraph.textContent?.trim().length !== 0) {
 		if (fontSize) {
 			calculatedFontSize = fontSize;
-			return;
-		}
+		} else if (svgPath && sizerParagraph) {
+			calculatedFontSize = (bounds[0] + bounds[1]) / 2;
+			const tempBounds = structuredClone(bounds);
 
-		if (sizerParagraph.textContent?.trim().length === 0) {
-			return;
-		}
-
-		if (svgPath && sizerParagraph) {
-			calculatedFontSize = (alpha + beta) / 2;
 			tickFunction().then(() => {
+				if (bounds === undefined) return;
+				if (tempBounds[0] !== bounds[0] || tempBounds[1] !== bounds[1]) return;
+
 				const comparison = compare(
 					svgPath.getTotalLength(),
 					sizerParagraph.getComputedTextLength(),
 					0.001
 				);
-				const alphaBetaComparison = compare(alpha, beta, svgPath.getTotalLength() / 1_000_000);
+				const alphaBetaComparison = compare(
+					bounds[0],
+					bounds[1],
+					svgPath.getTotalLength() / 1_000_000
+				);
 				if (comparison !== 0 && alphaBetaComparison !== 0) {
-					correctSize(
+					bounds = [
 						// path length is bigger than text length - text needs to be bigger
-						comparison === 1 ? alpha : calculatedFontSize,
+						comparison === 1 ? bounds[0] : calculatedFontSize,
 						// path length is smaller than text length - text needs to be smaller
-						comparison === -1 ? beta : calculatedFontSize
-					);
+						comparison === -1 ? bounds[1] : calculatedFontSize
+					];
 				}
 			});
 		}

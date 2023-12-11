@@ -9,6 +9,9 @@
 	import CircleText from './examples/Circle.svelte?raw';
 	import Circle from './examples/Circle.svelte';
 
+	import CircleRangeText from './examples/CircleRange.svelte?raw';
+	import CircleRange from './examples/CircleRange.svelte';
+
 	import TextPathText from './examples/TextPath.svelte?raw';
 	import TextPath from './examples/TextPath.svelte';
 
@@ -143,6 +146,21 @@
 		<div class="split" />
 		<div class="code">
 			<Highlight language={xml} code={CircleText.replace('$lib', 'svelte-text-path')} />
+		</div>
+	</div>
+
+	<p>
+		A circle can also take in a <code>range</code> property, which is an array of two numbers
+		between <code>0</code> and <code>1</code>, which specifies the range of the circle to display.
+	</p>
+
+	<div class="example">
+		<div class="demo">
+			<CircleRange />
+		</div>
+		<div class="split" />
+		<div class="code">
+			<Highlight language={xml} code={CircleRangeText.replace('$lib', 'svelte-text-path')} />
 		</div>
 	</div>
 </main>
