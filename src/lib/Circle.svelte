@@ -18,10 +18,11 @@
 	}
 
 	export let range: [number, number] = [0, 1];
+	export let fontSize: number | undefined = undefined;
 
 	$: path = describeArc(100, 100, 100, range[0] * Math.PI * 2, range[1] * Math.PI * 2);
 </script>
 
-<TextPath {path} viewBox={[0, 0, 200, 200]}>
+<TextPath {path} {fontSize} viewBox={[0, 0, 200, 200]}>
 	<slot />
 </TextPath>
